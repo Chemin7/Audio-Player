@@ -41,6 +41,8 @@ private slots:
 
     void on_btnMute_clicked();
 
+    void on_btnModify_clicked();
+
 private:
     Ui::player *ui;
     QMediaPlayer *mMediaPlayer;

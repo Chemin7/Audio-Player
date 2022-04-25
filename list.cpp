@@ -7,19 +7,24 @@
 list::Node::Node(){
     next=nullptr ;
     prev=nullptr;
+
+
 }
 
 list::Node::Node(song& s){
     data=s;
     next=nullptr ;
     prev=nullptr;
+
 }
+
 
 ///List
 list::list()
 {
     head=nullptr;
     rows=0;
+    id=0;
 }
 
 
@@ -114,7 +119,9 @@ void list::insertElem(Node* p,song& e) {
             p->next->prev=aux;
             p->next=aux;
             }
-        head=aux;
+
+        aux->id=this->id;
+        id++;
 
         //Table
 
@@ -125,13 +132,16 @@ void list::insertElem(Node* p,song& e) {
                      QTableWidgetItem *newItem = new QTableWidgetItem();
                      switch(col){
                          case 0:
-                             element=this->getFirstPos()->data.getName();
+                             element=this->getLastPos()->data.getName();
+                             aux->itemName=newItem;
                          break;
                          case 1:
-                             element=this->getFirstPos()->data.getAuthor();
+                             element=this->getLastPos()->data.getAuthor();
+                             aux->itemAuthor=newItem;
                          break;
                          case 2:
-                             element=this->getFirstPos()->data.getAddress();
+                             element=this->getLastPos()->data.getAddress();
+                             aux->itemAddress=newItem;
                          break;
                      }
 
@@ -177,8 +187,42 @@ void list::deleteFirstElem(){
 
     rows--;
     ///Eliminar al principio
-    ///table->removeRow(0);
-    table->removeRow(table->currentRow());
+    table->removeRow(0);
+
+    /// Eliminar al final
+    //table->removeRow(table->currentRow());
+
+}
+
+void list::deleteLastElem(){
+
+
+    ///Eliminar al principio
+    //table->removeRow(0);
+
+    /// Eliminar al final
+    //table->removeRow(0);
+    //int lastRow =head->prev->id;
+    table->removeRow(--rows);
+    deleteElem(head->prev);
+    /*if(head==head->prev){
+       table->removeRow(0);
+    }
+    else{
+
+        table->removeRow(--rows);
+    }*/
+        //table->removeRow(0);
+    //table->removeRow(table->selectRow(lastRow));
+    //table->removeRow(table->currentRow());
+
+
+
+    id--;
+    currentSong=head;
+    //table->selectRow(currentSong->id);
+
+
 
 }
 
@@ -192,22 +236,20 @@ list::Node* list::getFirstPos() {
 
 void list::nextSong(){
     currentSong = currentSong->next;
+     table->selectRow(currentSong->id);
 
 }
 
 void list::prevSong(){
      currentSong = currentSong->prev;
+     table->selectRow(currentSong->id);
 }
 
 list::Node* list::getLastPos() {
     if(isEmpty())
         return nullptr;
 
-    Node* aux(head);
-    while(aux->next!=nullptr)
-        aux=aux->next;
-
-    return aux;
+    return head->prev;
     }
 
 
@@ -264,6 +306,8 @@ void list::reverse(){
 
 
         head = prevNode;
+        ///Update indexes
+        updateIndexes();
 
         //Adjust table
 
@@ -294,7 +338,8 @@ void list::reverse(){
 
                  table->resizeRowsToContents();
             ///----------------------------
-
+            currentSong=head;
+            table->selectRow(head->id);
     }
 }
 song list::retrieve(Node* p) {
@@ -317,11 +362,56 @@ void list::deleteAll() {
         }
     }
 
+void list::updateIndexes(){
+    Node* ptrIndex(head);
+            int i(1);
+            do {
+                ptrIndex->id = i;
+                ptrIndex=ptrIndex->next;
+                i++;
+                }
+            while(ptrIndex!=head);
+}
 
-/*list& list::operator=(list& l) {
-    deleteAll();
-    copyAll(l);
-    return *this;
-    }*/
+void list::modify(int ID,song s){
+    Node* ptrIndex(head);
+    QString element;
+    int row ;
+
+    do {
+       if(ptrIndex->id == ID ){
+           ptrIndex->data.setName(s.getName());
+           ptrIndex->data.setAuthor(s.getAuthor());
+           ptrIndex->data.setAddress(s.getAddress());
+           row=--ID;
+           for(int col = 0; col < 3; col++ ) {
+              // QTableWidgetItem *newItem = new QTableWidgetItem();
+               switch(col){
+                   case 0:
+                       element=ptrIndex->data.getName();
+                   break;
+                   case 1:
+                       element=ptrIndex->data.getAuthor();
+                   break;
+                   case 2:
+                       element=ptrIndex->data.getAddress();
+                   break;
+               }
+                //setText(element);
+               //table->setCellWidget(row,col)
+               //table->setItem(row, col, table->widget);
+       }
+    }
+    ptrIndex=ptrIndex->next;
+
+    }while(ptrIndex!=head);
+
+    updateIndexes();
+    currentSong=head;
+    table->selectRow(head->id);
+
+
+
+    }
 
 

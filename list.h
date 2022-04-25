@@ -15,14 +15,20 @@ private:
         song data;
         Node* next;
         Node* prev;
+        int id;
+        QTableWidgetItem* itemName;
+        QTableWidgetItem* itemAuthor;
+        QTableWidgetItem* itemAddress;
 
     };
 
         Node* head;
+
         Node* currentSong;
         QTableWidget* table;
 
         bool isValidPos(Node*);
+        void updateIndexes();
         void copyAll(list);
 
         int rows;
@@ -32,6 +38,8 @@ private:
         list();
         ~list();
 
+        int id;
+
         void setTable(QTableWidget*);
 
         bool isEmpty();
@@ -39,6 +47,7 @@ private:
         void insertElem(Node*, song&);
         void deleteElem(Node*);
         void deleteFirstElem();
+        void deleteLastElem();
 
         song getCurrentSong();
 
@@ -53,6 +62,7 @@ private:
         Node* findElem(song&);
         Node* findElemByAtribute(std::string, int);
         void reverse();
+        void modify(int,song);
 
         song retrieve(Node*);
 

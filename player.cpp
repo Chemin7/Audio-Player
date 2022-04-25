@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <regex>
+#include <string>
 
 #include <QVariant>
 
@@ -28,7 +30,8 @@ player::player(QWidget *parent)
     table->setMinimumWidth(1250);
     table->setColumnWidth(2,600);
     table->setSortingEnabled(true);
-
+    //table->setFixedWidth()
+    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     /// PrgBar Connections
     mMediaPlayer = new QMediaPlayer(this);
 
@@ -45,6 +48,10 @@ player::player(QWidget *parent)
     else{
         ui->btnPlay->setEnabled(true);
     }*/
+
+    ///Modify
+    ui->spbxModify->setMinimum(0);
+    ui->spbxModify->setMaximum(0);
 }
 
 player::~player()
@@ -55,6 +62,14 @@ player::~player()
 
 void player::on_btnAdd_clicked()
 {
+    /*const std::regex expReg("a");
+    std::string expression = name.toStdString();
+    if(std::regex_match(expression,expReg)){
+        mySong.setAddress(address);
+    }else{
+        ui->lblName->setText("error");
+        return;
+    }*/
 
     song mySong;
     QString name ,author,address;
@@ -66,7 +81,9 @@ void player::on_btnAdd_clicked()
     mySong.setAuthor(author);
     mySong.setAddress(address);
 
-    myList->insertElem(nullptr,mySong);
+
+
+    myList->insertElem(myList->getLastPos(),mySong);
 
     ui->txtName->clear();
     ui->txtAutor->clear();
@@ -74,6 +91,8 @@ void player::on_btnAdd_clicked()
     ui->lblAddress->setText("URL");
 
      ui->lblActualSong->setText(myList->getCurrentSong().getName());
+
+      ui->spbxModify->setMaximum(myList->id);
 
    /* if(myList->isEmpty())
         ui->btnPlay->setEnabled(false);
@@ -144,8 +163,9 @@ void player::on_btnDelete_clicked()
     /*rows--;
     ///Eliminar al principio
     table->removeRow(0);*/
-    myList->deleteFirstElem();
-
+    myList->deleteLastElem();
+    /*if(!myList->isEmpty())
+        ui->lblActualSong->setText(myList->getCurrentSong().getName());*/
     ///Eliminar al final
     //table->removeRow(rows);
 
@@ -177,6 +197,33 @@ void player::on_btnMute_clicked()
       mMediaPlayer->setMuted (false);
        ui->btnMute->setText ("Mute");
     }
+
+
+   // table->selectRow(1);
+
+}
+
+
+void player::on_btnModify_clicked()
+{
+    int id=ui->spbxModify->value();
+    song mySong;
+    QString name ,author,address;
+    name = ui->txtName->text();
+    author = ui->txtAutor->text();
+    address = ui->lblAddress->text();
+
+    mySong.setName(name);
+    mySong.setAuthor(author);
+    mySong.setAddress(address);
+     myList->modify(id,mySong);
+
+    ui->txtName->clear();
+    ui->txtAutor->clear();
+    ui->lblAddress->clear();
+    ui->lblAddress->setText("URL");
+
+    table->selectRow(0);
 
 }
 

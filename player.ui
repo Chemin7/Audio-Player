@@ -20,7 +20,29 @@
    <string>player</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">*{
+font: 11pt &quot;Arial&quot;;
+}
+QPushButton{
+	
+	color:black;
+	background-color:#ef9126;
+}
+
+QMainWindow{
+background-color :#323232;
+}
+
+QLabel{
+	color:white;
+}
+
+QTableWidget{
+
+	background-color: rgb(134, 134, 134);
+	alternate-background-color: rgb(126, 126, 126);
+selection-background-color:#rgb(216, 216, 216);
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
@@ -29,7 +51,7 @@
      <height>0</height>
     </size>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="2,4">
       <item>
@@ -101,6 +123,11 @@
           </item>
           <item>
            <widget class="QProgressBar" name="prgBar">
+            <property name="styleSheet">
+             <string notr="true">QProgressBar{
+	color:white;
+}</string>
+            </property>
             <property name="value">
              <number>0</number>
             </property>
@@ -195,6 +222,27 @@
            </widget>
           </item>
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="lblModify">
+              <property name="text">
+               <string>Id:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spbxModify"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnModify">
+              <property name="text">
+               <string>Modificar</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QPushButton" name="btnDelete">
             <property name="text">
              <string>Delete</string>
@@ -225,7 +273,7 @@
      <x>0</x>
      <y>0</y>
      <width>670</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuReproductor_de_Audio">
