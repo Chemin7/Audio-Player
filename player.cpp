@@ -8,6 +8,8 @@
 #include <QTableWidgetItem>
 #include <regex>
 #include <string>
+#include <QRegExpValidator>
+
 
 #include <QVariant>
 
@@ -50,8 +52,10 @@ player::player(QWidget *parent)
     }*/
 
     ///Modify
-    ui->spbxModify->setMinimum(0);
-    ui->spbxModify->setMaximum(0);
+    ui->spbxModify->setMinimum(1);
+    ui->spbxModify->setMaximum(1);
+
+    setEnableBtns(false);
 }
 
 player::~player()
@@ -59,6 +63,13 @@ player::~player()
     delete ui;
 }
 
+void player::setEnableBtns(bool value){
+    ui->btnPrev->setEnabled(value);
+    ui->btnPlay->setEnabled(value);
+    ui->btnNext->setEnabled(value);
+    ui->btnPause->setEnabled(value);
+    ui->btnStop->setEnabled(value);
+}
 
 void player::on_btnAdd_clicked()
 {
@@ -81,18 +92,31 @@ void player::on_btnAdd_clicked()
     mySong.setAuthor(author);
     mySong.setAddress(address);
 
-
-
+    QRegExp rx("(.*\\.(wav|mp3))\$");
+   QRegExpValidator* valiAddress=new QRegExpValidator(rx, this);
+   if( !rx.exactMatch(ui->lblAddress->text()) || ui->txtName->text() == "" ||  ui->txtAutor->text() == ""){
+        ///QDialog
+       ui->txtName->clear();
+       ui->txtAutor->clear();
+       ui->lblAddress->clear();
+       ui->lblAddress->setText("URL");
+       return;
+    }
     myList->insertElem(myList->getLastPos(),mySong);
-
+    if(!myList->isEmpty())
+        setEnableBtns(true);
     ui->txtName->clear();
     ui->txtAutor->clear();
     ui->lblAddress->clear();
     ui->lblAddress->setText("URL");
 
-     ui->lblActualSong->setText(myList->getCurrentSong().getName());
+    ui->lblActualSong->setText(myList->getCurrentSong().getName());
 
-      ui->spbxModify->setMaximum(myList->id);
+    ui->spbxModify->setMaximum(myList->id);
+
+
+
+
 
    /* if(myList->isEmpty())
         ui->btnPlay->setEnabled(false);
@@ -163,12 +187,24 @@ void player::on_btnDelete_clicked()
     /*rows--;
     ///Eliminar al principio
     table->removeRow(0);*/
+    if(!myList->isEmpty()){
     myList->deleteLastElem();
-    /*if(!myList->isEmpty())
-        ui->lblActualSong->setText(myList->getCurrentSong().getName());*/
+
+
     ///Eliminar al final
     //table->removeRow(rows);
 
+      if(!myList->isEmpty()){
+          mMediaPlayer->stop();
+           ui->spbxModify->setMaximum(myList->id);
+          ui->lblActualSong->setText(myList->getFirstPos()->data.getName());
+      }
+          else{
+          mMediaPlayer->stop();
+           setEnableBtns(false);
+          ui->lblActualSong->setText("...");
+      }
+    }
 
 }
 

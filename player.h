@@ -17,6 +17,7 @@ class player : public QMainWindow
 public:
     player(QWidget *parent = nullptr);
     ~player();
+    void setEnableBtns(bool);
 
 private slots:
     void on_btnAdd_clicked();
@@ -48,6 +49,8 @@ private:
     QMediaPlayer *mMediaPlayer;
     QTableWidget *table;
     list *myList;
+
+
 
 };
 #endif // PLAYER_H

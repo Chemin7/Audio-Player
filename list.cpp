@@ -7,8 +7,6 @@
 list::Node::Node(){
     next=nullptr ;
     prev=nullptr;
-
-
 }
 
 list::Node::Node(song& s){
@@ -148,7 +146,8 @@ void list::insertElem(Node* p,song& e) {
                      newItem->setText(element);
                      table->setItem(rows, col, newItem);
                      table->setCurrentItem(newItem);
-                      table->setItemSelected(newItem,true);
+                     /*
+                      table->setItemSelected(newItem,true);*/
                  }
 
                  rows++;
@@ -364,7 +363,7 @@ void list::deleteAll() {
 
 void list::updateIndexes(){
     Node* ptrIndex(head);
-            int i(1);
+            int i(0);
             do {
                 ptrIndex->id = i;
                 ptrIndex=ptrIndex->next;
@@ -376,37 +375,43 @@ void list::updateIndexes(){
 void list::modify(int ID,song s){
     Node* ptrIndex(head);
     QString element;
-    int row ;
+    int row=--ID;
 
     do {
-       if(ptrIndex->id == ID ){
+       if(ptrIndex->id == row ){
            ptrIndex->data.setName(s.getName());
            ptrIndex->data.setAuthor(s.getAuthor());
            ptrIndex->data.setAddress(s.getAddress());
-           row=--ID;
-           for(int col = 0; col < 3; col++ ) {
+
+
+            for(int col = 0; col < 3; col++ ) {
               // QTableWidgetItem *newItem = new QTableWidgetItem();
                switch(col){
                    case 0:
                        element=ptrIndex->data.getName();
+                       ptrIndex->itemName->setText(element);
                    break;
                    case 1:
                        element=ptrIndex->data.getAuthor();
+                       ptrIndex->itemAuthor->setText(element);
                    break;
                    case 2:
                        element=ptrIndex->data.getAddress();
+                       ptrIndex->itemAddress->setText(element);
                    break;
                }
                 //setText(element);
                //table->setCellWidget(row,col)
-               //table->setItem(row, col, table->widget);
+               //
+              // break;
        }
+           break;
     }
     ptrIndex=ptrIndex->next;
 
     }while(ptrIndex!=head);
 
-    updateIndexes();
+
     currentSong=head;
     table->selectRow(head->id);
 

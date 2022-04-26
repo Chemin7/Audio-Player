@@ -231,7 +231,11 @@ selection-background-color:#rgb(216, 216, 216);
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spbxModify"/>
+             <widget class="QSpinBox" name="spbxModify">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="btnModify">
